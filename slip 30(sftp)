@@ -1,0 +1,49 @@
+sudo apt install openssh-server
+sudo systemctl start ssh
+sudo systemctl enable ssh
+sudo systemctl status ssh
+hostname -I
+sftp kali@192.168.92.128
+==================================================================================================
+Q2. Monitor & Verify Files [15 Marks]
+1. Enable Logging
+bash
+# Edit /etc/ssh/sshd_config
+LogLevel VERBOSE
+
+sudo systemctl restart ssh
+# View logs
+sudo tail -f /var/log/auth.log | grep sftp
+2. Check File Integrity
+Before transfer (on source):
+
+bash
+sha256sum file.txt > file.txt.sha256
+After transfer (on destination):
+
+bash
+sha256sum -c file.txt.sha256
+# Output: file.txt: OK
+3. Scan for Malware
+bash
+# Install ClamAV
+sudo apt install clamav -y
+sudo freshclam
+
+# Scan uploads folder
+clamscan /home/sftpuser/uploads/
+4. Monitor File Changes
+bash
+# Install incron or use watch
+sudo apt install incron
+# Create script to log file events
+5. Quick Audit Commands
+bash
+# Check who logged in
+grep "sftp" /var/log/auth.log
+
+# Check file permissions
+ls -la /home/sftpuser/uploads/
+
+# Check disk space
+df -h
