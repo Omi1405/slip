@@ -1,0 +1,51 @@
+Q1. Simulate a Cybersecurity Incident & Execute Response Plan (10 Marks)
+Scenario
+An employee reports their computer is slow and showing ransom note. The file server also has encrypted files.
+
+Incident Response Plan Execution
+Step	Action
+1. Detect	Alert from employee + unusual file encryption alerts from EDR
+2. Contain	Disconnect infected PC from network. Shut down file server. Block ransomware C2 IPs at firewall.
+3. Investigate	Check which files were encrypted. Find entry point (phishing email with malicious attachment).
+4. Eradicate	Remove malware. Delete malicious files. Disable compromised user accounts.
+5. Recover	Restore file server from clean backup. Reimage infected PC.
+6. Communicate	Notify management. Update employees about phishing threat.
+
+============================================================================================================================================================================
+
+Q2. Assess Effectiveness & Document Lessons Learned (15 Marks)
+Effectiveness Assessment
+What Went Well	What Went Wrong
+Quick containment stopped spread	No backup of file server (had to rebuild)
+EDR alerts helped detection	Employee clicked phishing link despite training
+Backup restored file server	2 hours downtime caused business impact
+Lessons Learned Document
+Incident Summary:
+
+Ransomware via phishing email
+
+1 workstation + file server affected
+
+Resolved in 4 hours
+
+Root Cause:
+
+Employee opened malicious attachment from spoofed vendor email
+
+What We Learned:
+
+Backups are critical – We will implement daily automated backups
+
+Email filtering needs improvement – Will add sandboxing for attachments
+
+User training must be repeated – Quarterly phishing simulations
+
+Containment was fast – Will maintain same response speed
+
+Action Items:
+
+Action	Owner	Due Date
+Implement daily backups	IT Team	1 week
+Deploy email attachment sandboxing	Security Team	2 weeks
+Conduct phishing simulation	HR/Training	1 month
+Update incident response playbook	Security Lead	2 weeks
