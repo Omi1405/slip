@@ -1,0 +1,120 @@
+Mobile App Security Analysis - Android Focus [25M]
+PART 1: Analysis Commands & Checklist [10M]
+Setup & Tools Installation
+bash
+# Install Required Tools
+sudo apt update
+sudo apt install openjdk-11-jdk android-sdk-platform-tools -y
+
+# Install APKTool
+wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool
+chmod +x apktool
+sudo mv apktool /usr/local/bin/
+
+# Install JADX
+wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-gui-1.4.7.zip
+unzip jadx-gui-1.4.7.zip
+cd jadx-gui-1.4.7 && ./jadx-gui
+
+# Install Frida
+pip3 install frida-tools objection
+1. Static Analysis
+bash
+# Decompile APK
+apktool d target.apk -o decompiled/
+jadx target.apk -d java_source/
+
+# Check AndroidManifest.xml
+cd decompiled/
+cat AndroidManifest.xml
+
+# Critical Checks:
+echo "=== Critical Vulnerabilities ==="
+grep "android:debuggable=\"true\"" AndroidManifest.xml
+grep "android:allowBackup=\"true\"" AndroidManifest.xml  
+grep "android:usesCleartextTraffic=\"true\"" AndroidManifest.xml
+grep "android:exported=\"true\"" AndroidManifest.xml
+
+# List all permissions
+grep "uses-permission" AndroidManifest.xml
+
+# Search hardcoded secrets
+cd ../java_source/
+grep -r "API_KEY\|SECRET\|PASSWORD\|TOKEN\|KEY" . --include="*.java"
+grep -r "http://" . --include="*.xml" --include="*.java"
+2. Dynamic Analysis
+bash
+# Connect device/emulator
+adb devices
+adb install target.apk
+
+# Get app package name
+adb shell pm list packages | grep -i "appname"
+
+# Monitor logs for sensitive data
+adb logcat | grep -iE "password|token|key|secret|credit|pin"
+
+# Monitor specific app
+adb logcat | grep "$(adb shell ps | grep com.example.app | awk '{print $2}')"
+
+# Check app data storage
+adb shell
+run-as com.example.app
+ls -la /data/data/com.example.app/
+cat /data/data/com.example.app/shared_prefs/*.xml
+ls /data/data/com.example.app/databases/
+
+# Check SQLite databases
+sqlite3 /data/data/com.example.app/databases/app.db
+.tables
+SELECT * FROM sensitive_table;
+3. Network Analysis
+bash
+# Setup Burp Suite proxy
+# 1. Start Burp: Proxy → Options → Add 127.0.0.1:8080
+# 2. Configure Android emulator:
+adb shell settings put global http_proxy 127.0.0.1:8080
+
+# Install Burp certificate
+# Download from http://burp/cert
+adb push burp.crt /sdcard/
+adb shell
+su
+cp /sdcard/burp.crt /system/etc/security/cacerts/
+chmod 644 /system/etc/security/cacerts/burp.crt
+reboot
+4. Runtime Analysis with Frida
+bash
+# Install Frida server
+adb root
+adb push frida-server /data/local/tmp/
+adb shell chmod 755 /data/local/tmp/frida-server
+adb shell /data/local/tmp/frida-server &
+
+# List running apps
+frida-ps -U
+
+# Trace app
+frida-trace -U -i "open" com.example.app
+
+# Bypass SSL Pinning
+objection -g com.example.app explore
+android sslpinning disable
+
+# Inside objection console:
+android hooking list classes
+android hooking search classes password
+android hooking watch class_method com.example.app.LoginActivity.onLogin --dump-args
+android storage list shared_prefs
+5. Common Vulnerability Checklist
+#	Vulnerability	Check Command	Severity
+1	Debuggable enabled	grep debuggable AndroidManifest.xml	High
+2	AllowBackup enabled	grep allowBackup AndroidManifest.xml	Medium
+3	HTTP traffic	grep usesCleartextTraffic AndroidManifest.xml	High
+4	Exported components	grep -c "exported=\"true\"" AndroidManifest.xml	High
+5	Hardcoded secrets	grep -r "API_KEY|SECRET" java_source/	Critical
+6	Insecure logging	adb logcat | grep password	Medium
+7	Weak encryption	grep -r "AES|RSA|DES" java_source/	High
+8	SQL Injection	grep -r "rawQuery|execSQL" java_source/	High
+9	Missing certificate pinning	grep -r "HostnameVerifier|TrustManager" java_source/	High
+10	Intent injection	grep -r "getIntent().get" java_source/	Medium
