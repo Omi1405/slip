@@ -1,0 +1,4 @@
+sudo apt install clamav
+clamscan -r /home/kali
+clamscan --version
+
