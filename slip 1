@@ -1,34 +1,28 @@
-# 1. Install tools
+
 sudo apt update && sudo apt install bridge-utils iproute2 -y
 
-# 2. Create the bus
 sudo ip link add bus0 type bridge
 sudo ip link set bus0 up
 
-# 3. Create 3 virtual PCs
 sudo ip netns add pc1
 sudo ip netns add pc2
 sudo ip netns add pc3
 
-# 4. Connect PC1
 sudo ip link add veth1 type veth peer name veth1-bus
 sudo ip link set veth1 netns pc1
 sudo ip link set veth1-bus master bus0
 sudo ip link set veth1-bus up
 
-# 5. Connect PC2
 sudo ip link add veth2 type veth peer name veth2-bus
 sudo ip link set veth2 netns pc2
 sudo ip link set veth2-bus master bus0
 sudo ip link set veth2-bus up
 
-# 6. Connect PC3
 sudo ip link add veth3 type veth peer name veth3-bus
 sudo ip link set veth3 netns pc3
 sudo ip link set veth3-bus master bus0
 sudo ip link set veth3-bus up
 
-# 7. Assign IPs and turn on interfaces
 sudo ip netns exec pc1 ip addr add 10.0.0.1/24 dev veth1
 sudo ip netns exec pc1 ip link set veth1 up
 
@@ -38,5 +32,22 @@ sudo ip netns exec pc2 ip link set veth2 up
 sudo ip netns exec pc3 ip addr add 10.0.0.3/24 dev veth3
 sudo ip netns exec pc3 ip link set veth3 up
 
-# 8. Test (should work)
 sudo ip netns exec pc1 ping -c 2 10.0.0.2
+
+
+Q2=================================================================================================
+# Set everything up
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+sudo iptables -P OUTPUT ACCEPT
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+sudo iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+
+# Check the result
+sudo iptables -L -v
+
