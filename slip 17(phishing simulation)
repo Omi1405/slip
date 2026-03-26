@@ -1,0 +1,93 @@
+Q1. Phishing Simulation [10M]
+Objective: Create and conduct a simulation to test user awareness.
+
+Steps:
+
+Planning
+
+Define scope: All employees or a specific department.
+
+Choose platform: Use tools like GoPhish, KnowBe4, or a manual email setup.
+
+Set timeline: One-day campaign or staggered over a week.
+
+Design Phishing Email
+
+Make it realistic: Use urgency, spoofed sender (e.g., “IT Support”), and a fake login page.
+
+Example: “Your password expires in 24 hours. Click here to keep the same password.”
+
+Include a tracked link to monitor clicks.
+
+Conduct Simulation
+
+Send emails without prior notification.
+
+Track:
+
+Emails opened
+
+Links clicked
+
+Credentials entered (if using a fake login page)
+
+Reported as phishing (if a report button is available)
+
+Ethical & Safety Measures
+
+Inform HR/management in advance.
+
+Ensure fake landing page does not store actual credentials.
+
+Provide immediate redirect to a training page after click.
+
+==================================================================================================================================================
+Q2. Analyze Results & Generate Report [15M]
+Objective: Present findings and recommend improvements.
+
+Report Structure:
+
+Executive Summary
+
+Total recipients: e.g., 200
+
+Click rate: e.g., 35% (70 users)
+
+Credential submission: e.g., 15% (30 users)
+
+Reported rate: e.g., 5% (10 users)
+
+Detailed Findings
+
+Open Rate: % who opened the email — indicates subject line effectiveness.
+
+Click Rate: % who clicked the link — shows susceptibility.
+
+Credential Entry Rate: % who submitted data — highest risk.
+
+Reporting Rate: % who flagged email — measures security culture.
+
+Segmentation (Optional)
+
+Compare departments, seniority, or office locations to identify high-risk groups.
+
+Analysis
+
+High click rate suggests need for better awareness of phishing indicators.
+
+Low reporting rate indicates lack of confidence or no clear reporting process.
+
+Recommendations
+
+Mandatory phishing awareness training for high-risk users.
+
+Implement a “Report Phishing” button in email clients.
+
+Conduct quarterly simulations with varying difficulty levels.
+
+Reward users who report phishing attempts.
+
+Conclusion
+
+Summarize current risk level and planned next steps.
+
