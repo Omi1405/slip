@@ -1,0 +1,163 @@
+Q1. Investigate and respond to a simulated wireless security breach. [10M]
+Step 1: Detection & Identification
+Alert Trigger: The SIEM (Security Information and Event Management) dashboard triggers a high-severity alert labeled "Rogue Access Point Detected." The alert is based on a Wireless Intrusion Prevention System (WIPS) sensor identifying a new SSID broadcasting with a MAC address that does not match the corporate approved hardware list.
+
+Initial Triage: I verify the alert. The WIPS shows the rogue AP is on Channel 6, with a signal strength suggesting it is physically located in the East Lobby. The MAC address OUI (Organizationally Unique Identifier) resolves to a consumer-grade router manufacturer (e.g., TP-Link), which is non-standard for our enterprise.
+
+Step 2: Containment (Immediate Response)
+To stop the bleed, I initiate the following containment actions:
+
+De-authenticate via WIPS: I use the WIPS controller to send de-authentication packets to the rogue AP. This forcibly disconnects any clients currently connected to it.
+
+Switch Port Disable: I identify the physical switch port feeding the rogue AP. Since the AP is wired into the network (providing a bridge from wireless to wired LAN), I remotely shut down the specific switch port (e.g., *Gi1/0/24*) via the network management console. This kills the uplink.
+
+MAC Filtering: I add the rogue AP’s MAC address and the MAC addresses of any connected suspect clients to a global blocklist on the firewall and wireless controller to prevent re-association.
+
+Step 3: Physical Investigation & Collection
+I dispatch a security guard and a network engineer to the physical location (East Lobby).
+
+Discovery: They locate a small wireless router hidden behind a couch, plugged into an exposed Ethernet wall jack.
+
+Chain of Custody: I instruct them to photograph the device in situ, unplug it, and bag it as evidence. I document the time of seizure, who handled it, and where it is stored.
+
+Step 4: Analysis (Investigation)
+With the threat neutralized, I analyze the scope:
+
+Wired Logs: I review the logs for the affected switch port. I identify that the port was active for 3 hours. It negotiated a VLAN (Virtual Local Area Network) that, unfortunately, was configured for "Guest Traffic" but was trunked to the internal data VLAN due to a misconfiguration.
+
+Wireless Logs: I analyze the wireless controller logs to see what devices connected to the rogue AP. I identify three client MAC addresses that connected during the window.
+
+Firewall Logs: I cross-reference the IP address assigned to the rogue AP (via DHCP logs) against the firewall logs. I find outbound traffic to a known malicious IP address in Eastern Europe, indicating data exfiltration.
+
+Q2. Document the incident, response actions, and mitigation strategies. [15M]
+Incident Report: Rogue Access Point Breach
+Incident ID: IR-2024-10-28-001
+Date/Time: October 28, 2024, 14:32 UTC
+Classification: Unauthorized Access / Data Exfiltration (Medium Severity)
+
+1. Executive Summary
+On October 28, 2024, a rogue wireless access point was discovered in the East Lobby. The device was physically plugged into the corporate network, bypassing the enterprise Wi-Fi encryption (WPA2-Enterprise). The breach resulted in potential exposure of internal network traffic for approximately 3 hours. The incident was contained within 35 minutes of detection. No encrypted corporate credentials were captured, but unencrypted HTTP traffic and hostnames were exposed.
+
+2. Incident Details
+
+Vector: Physical access to a lobby Ethernet jack.
+
+Method: Attacker deployed a consumer-grade router configured with a default SSID, acting as a transparent bridge to the internal VLAN.
+
+Impact:
+
+Confidentiality: Potential exposure of unencrypted internal web traffic from 3 connected user devices.
+
+Integrity: No evidence of data modification.
+
+Availability: No impact.
+
+3. Response Actions (Timeline)
+
+Time	Action
+14:32	WIPS alerts on unknown SSID. Analyst begins investigation.
+14:37	Rogue AP confirmed; Switch port *Gi1/0/24* disabled remotely.
+14:45	Physical security confiscates device; Chain of custody established.
+15:05	MAC address of rogue AP and three suspect clients blacklisted.
+16:00	Affected users identified; Their devices scanned for malware (none found).
+4. Root Cause Analysis
+
+Physical Security: Unsecured Ethernet jacks in public areas allowed physical connectivity.
+
+Network Configuration: The switch port was configured with VLAN 1 (Native/Data) instead of VLAN 999 (Captive Portal/Isolated).
+
+Visibility: No 802.1X (Network Access Control) was enabled on wired switchports, allowing any device to gain network access upon physical connection.
+
+5. Mitigation Strategies (Remediation)
+
+A. Short-Term (Completed within 48 hours)
+
+Network Access Control (NAC): Implement 802.1X authentication on all edge switchports. Any device plugged in must authenticate via certificate or credentials before gaining VLAN access. Rogue APs will be placed in a quarantine VLAN if they fail authentication.
+
+Port Disabling: Disable all unused physical Ethernet jacks in public areas (lobby, cafeteria, conference rooms). Use shutdown on interfaces not requiring active service.
+
+VLAN Segmentation: Move all public-area jacks to an isolated "Infrastructure" VLAN that requires MAC authentication bypass (MAB) and routes only to the internet, not the internal corporate LAN.
+
+B. Long-Term (Strategic Improvements)
+
+Wireless Containerization: Implement Private Pre-Shared Keys (PPSK) or Enhanced Open (OWE) for guest networks to prevent
+
+easy
+Here is a simplified, step-by-step breakdown.
+
+Q1. Investigate and respond to a simulated wireless security breach. [10M]
+Step 1: Detect the Breach
+An alert appears on the security monitoring system: "Rogue Access Point Detected."
+
+The system shows a new, unknown Wi-Fi device is connected to the company network from the lobby area.
+
+Step 2: Verify the Threat
+I check the device details. The MAC address shows it is a home-grade router (not company equipment).
+
+I confirm it is not authorized to be on the network.
+
+Step 3: Contain the Breach
+I remotely disable the network port that the rogue device is plugged into. This immediately cuts its connection to the company network.
+
+I use the wireless management system to block the rogue device's MAC address, preventing it from reconnecting.
+
+Step 4: Physical Investigation
+I send security staff to the lobby to locate the device.
+
+They find a small router hidden behind furniture, plugged into a wall network jack.
+
+They take photos, unplug the device, and bag it as evidence.
+
+Step 5: Analyze the Impact
+I check logs to see:
+
+How long was it connected? 2 hours
+
+What did it access? It was connected to the internal network VLAN.
+
+How many devices connected to it? 2 employee laptops briefly connected.
+
+I scan those employee laptops for malware (none found).
+
+Step 6: Document Findings
+I record everything: time of detection, actions taken, devices involved, and evidence collected.
+
+Q2. Document the incident, response actions, and mitigation strategies. [15M]
+Incident Report
+Incident: Rogue Access Point Found in Lobby
+Date: October 28, 2024
+Reported By: Network Security Team
+
+What Happened
+An unauthorized wireless router was found plugged into a network jack in the company lobby. It was active for 2 hours before detection. Two employee laptops connected to it during that time, potentially exposing internal network traffic.
+
+How We Responded
+Time	Action
+10:00 AM	Alert received: rogue AP detected.
+10:05 AM	Confirmed device is unauthorized.
+10:08 AM	Disabled the network port remotely.
+10:15 AM	Security found and removed the device.
+10:30 AM	Blocked device MAC address.
+11:00 AM	Scanned affected employee laptops.
+Root Cause
+Unsecured network jack in a public area.
+
+No authentication required on wired ports (anyone could plug in).
+
+VLAN misconfiguration — the lobby port had access to internal systems instead of being isolated.
+
+Mitigation Strategies
+Immediate Fixes (Done)
+Disabled all unused network jacks in public areas.
+
+Changed VLAN on lobby ports to guest network only (no internal access).
+
+Long-Term Fixes (To Implement)
+Strategy	How It Helps
+802.1X / NAC	Requires devices to authenticate before gaining network access. Blocks rogue devices automatically.
+Monthly sweeps	Security team physically checks public areas for hidden devices.
+Wireless intrusion prevention	Automatically detects and blocks rogue APs without manual intervention.
+Employee awareness	Train staff to report unknown network devices.
+Conclusion
+The breach was contained quickly with no data loss or malware infection. The incident highlighted the need for better physical port security and network access controls. All recommended fixes are scheduled for implementation.
+
