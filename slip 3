@@ -3,3 +3,13 @@ touch file.txt
 ls -l file.txt
 sudo chown raj file.txt
 ls -l file.txt
+
+===================================================================================================
+firewall
+
+sudo apt install ufw
+udo ufw enable
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw status verbose
