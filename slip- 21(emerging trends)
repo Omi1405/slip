@@ -1,0 +1,20 @@
+Q1. Emerging Trends in Cybersecurity (Short)
+Agentic AI Security: Autonomous AI agents that investigate and remediate threats independently, moving from human-led to machine-speed defense.
+
+AI as an Attack Surface: New threats targeting AI models themselves, including prompt injection, data poisoning, and the proliferation of "non-human identities" (AI bots).
+
+Non-Human Identity (NHI) Management: Specialized security for machine identities (API keys, service accounts) which now outnumber human users.
+
+Deepfake Defense: AI-powered biometric authentication and liveness detection to counter synthetic identity fraud and deepfake-driven executive impersonation.
+
+Post-Quantum Cryptography (PQC): Migration to quantum-resistant algorithms to prevent "harvest now, decrypt later" attacks.
+
+Q2. Comparison: Latest vs. Traditional (Short)
+Feature	Traditional Approach	Latest Approach
+Architecture	Fragmented point solutions (silos).	Unified, AI-native platforms.
+Defense	Perimeter-based (firewalls, VPNs).	Identity & data-centric (Zero Trust).
+Speed	Human-led (minutes to hours).	Machine-speed (autonomous agents).
+Identity	Focused on human users (IAM).	Includes Non-Human Identities (NHI).
+App Security	Vulnerability counting (SAST/DAST).	Attack path analysis & risk prioritization.
+Cryptography	Static algorithms (RSA/ECC).	Cryptographic agility & Post-Quantum readiness.
+Response	Reactive (fixing breaches).	Predictive (AI-led threat hunting).
