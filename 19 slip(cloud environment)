@@ -1,0 +1,195 @@
+Q1. Implement Security Best Practices for Cloud Environments [10M]
+GUI Walkthrough: AWS Management Console
+1. IAM (Identity & Access Management) – GUI Steps
+Enable MFA for Root Account
+
+Step	Action
+1	Log into AWS Console as root user
+2	Search IAM in the top search bar
+3	Click Users → root (or your root email)
+4	Select Security credentials tab
+5	Next to Assigned MFA device, click Assign MFA device
+6	Choose Authenticator app (Google Authenticator / Microsoft Authenticator)
+7	Scan QR code with phone app, enter two consecutive OTP codes
+8	Click Assign MFA – root account now secured
+Create Least-Privilege IAM Role
+
+Step	Action
+1	IAM → Roles → Create role
+2	Select AWS service → EC2 (for example)
+3	Click Next
+4	Search and select only: AmazonS3ReadOnlyAccess (not full access)
+5	Click Next → Role name: EC2-S3-ReadOnly-Role
+6	Click Create role
+Enforce MFA for All Users
+
+Step	Action
+1	IAM → Account settings
+2	Under Security, check Require MFA to sign in
+3	Click Update
+2. S3 Encryption – GUI Steps
+Enable Default Encryption on S3 Bucket
+
+Step	Action
+1	S3 → Buckets → Click your bucket name
+2	Select Properties tab
+3	Scroll to Default encryption → Click Edit
+4	Select Enable → Choose SSE-S3 (AES-256)
+5	Click Save changes
+Block Public Access
+
+Step	Action
+1	Same bucket → Permissions tab
+2	Under Block public access, click Edit
+3	Check all 4 boxes:
+☑ Block public access to buckets and objects granted through new access control lists (ACLs)
+☑ Block public access to buckets and objects granted through any access control lists (ACLs)
+☑ Block public access to buckets and objects granted through new public bucket policies
+☑ Block public access to buckets and objects granted through any public bucket policies
+4	Click Save changes
+3. VPC Security – GUI Steps
+Create Security Group with Least Privilege
+
+Step	Action
+1	VPC → Security Groups → Create security group
+2	Name: Web-Server-SG
+3	Inbound rules:
+Type: HTTPS	Source: 0.0.0.0/0 (if public)
+Type: HTTP	Source: 0.0.0.0/0
+Type: SSH	Source: Your office IP only (e.g., 203.0.113.0/32)
+4	Outbound rules: Keep default (all traffic)
+5	Click Create security group
+4. Encryption for RDS Databases – GUI Steps
+Enable Encryption on New RDS Instance
+
+Step	Action
+1	RDS → Create database
+2	Choose Standard create
+3	Select engine (e.g., MySQL)
+4	Under Encryption, check Enable encryption
+5	Choose a KMS key (use default AWS managed key)
+6	Complete rest of configuration → Click Create database
+Enable Encryption on Existing Unencrypted RDS (GUI Workaround)
+
+Step	Action
+1	Take a snapshot of the existing database
+2	RDS → Snapshots → Select snapshot
+3	Click Actions → Copy snapshot
+4	Under Encryption, check Enable encryption
+5	Restore new encrypted database from encrypted snapshot
+6	Migrate traffic → Delete old unencrypted database
+Q2. Configure Cloud Monitoring Tools to Track Security Threats [15M]
+GUI Walkthrough: AWS CloudTrail, CloudWatch, GuardDuty, Security Hub
+1. AWS CloudTrail – Enable API Activity Logging
+Step-by-Step GUI:
+
+Step	Action
+1	Search CloudTrail in AWS Console
+2	Click Trails → Create trail
+3	Trail name: Company-Security-Trail
+4	Under Apply trail to all regions, select Yes
+5	Under Management events, select All
+6	Under Data events, select S3 and Lambda (track object-level activity)
+7	Create new S3 bucket for logs: company-cloudtrail-logs
+8	Click Create trail
+2. Amazon GuardDuty – Intelligent Threat Detection
+Step-by-Step GUI:
+
+Step	Action
+1	Search GuardDuty
+2	Click Get started
+3	Click Enable GuardDuty
+4	Once enabled, click Settings → Configure findings export to S3
+5	Review sample findings under Findings tab to see what GuardDuty monitors
+Common Findings GuardDuty Detects:
+
+UnauthorizedAccess:EC2/SSHBruteForce
+
+CryptoCurrency:EC2/BitcoinTool.B
+
+Recon:EC2/PortProbeUnprotectedPort
+
+Backdoor:EC2/DenialOfService.Udp
+
+3. Amazon CloudWatch – Configure Alarms
+Create CloudWatch Alarm for Unauthorized API Calls
+
+Step	Action
+1	CloudWatch → Alarms → All alarms → Create alarm
+2	Click Select metric → CloudTrail → Event metrics
+3	Select metric: UnauthorizedOperation events
+4	Statistic: Sum → Period: 5 minutes
+5	Condition: Greater than threshold → 0
+6	Configure notification: Create new SNS topic → Email: security@company.com
+7	Alarm name: Unauthorized-API-Call-Alert
+8	Click Create alarm
+Create CloudWatch Alarm for Root Account Usage
+
+Step	Action
+1	Same path: CloudWatch → Alarms → Create alarm
+2	Select metric: RootAccountUsage
+3	Threshold: > 0 for 1 datapoint
+4	Notification: Send to security team
+5	Name: Root-Account-Activity-Alert
+Create Dashboard for Security Metrics
+
+Step	Action
+1	CloudWatch → Dashboards → Create dashboard
+2	Name: Security-Monitoring
+3	Add widgets:
+- Line graph: Failed login attempts over time
+- Number: Open GuardDuty findings count
+- Number: IAM policy changes in last 24h
+4	Click Save dashboard
+4. AWS Security Hub – Centralized Security View
+Step-by-Step GUI:
+
+Step	Action
+1	Search Security Hub
+2	Click Go to Security Hub → Enable
+3	Under Integrations, enable:
+☑ GuardDuty
+☑ Inspector
+☑ Macie
+☑ IAM Access Analyzer
+4	Go to Insights → Create custom insights for high-severity findings
+5	Go to Security standards → Enable CIS AWS Foundations Benchmark
+6	Review failing controls and remediate
+5. AWS Config – Resource Compliance Monitoring
+Step-by-Step GUI:
+
+Step	Action
+1	Search AWS Config
+2	Click Get started → Set up
+3	Under Resources to record, select All resources
+4	Under Rules, add managed rules:
+- s3-bucket-public-read-prohibited
+- s3-bucket-public-write-prohibited
+- iam-root-access-key-check
+- encrypted-volumes
+- restricted-ssh
+5	Click Save → Config continuously checks compliance
+Practical GUI Deliverables Summary
+For Q1 (Security Best Practices)	For Q2 (Monitoring Tools)
+✅ Screenshot: MFA enabled on root	✅ Screenshot: CloudTrail trail created
+✅ Screenshot: S3 default encryption enabled	✅ Screenshot: GuardDuty enabled with findings
+✅ Screenshot: S3 public access blocked	✅ Screenshot: CloudWatch alarm created
+✅ Screenshot: Security group with restricted SSH	✅ Screenshot: Security Hub dashboard
+✅ Screenshot: RDS encryption enabled	✅ Screenshot: AWS Config rules active
+Sample GUI Screenshot Checklist
+If you need to submit evidence, capture these views:
+
+IAM → Account settings → "Require MFA to sign in" enabled
+
+S3 → Bucket properties → "Default encryption: AES-256"
+
+S3 → Bucket permissions → All 4 public access blocks checked
+
+VPC → Security group → Inbound rules with SSH restricted to IP
+
+GuardDuty → Findings → Active threats detected (or "No findings")
+
+CloudWatch → Alarms → List of configured security alarms
+
+Security Hub → Summary dashboard → Security score
+
