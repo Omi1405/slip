@@ -1,0 +1,63 @@
+Q1. Incident Response Plan (Simulated Security Breach)
+Scenario: Unauthorized access detected to a customer database.
+
+1. Preparation
+
+Team & Tools: Ensure the Incident Response Team (IRT) is on-call. Verify that logging, backup, and forensic tools are functional.
+
+Documentation: Have pre-approved communication templates and contact lists ready.
+
+2. Identification
+
+Detect: Security team flags an alert (e.g., unusual database export at 3:00 AM by a non-standard user account).
+
+Validate: Analyst verifies the alert is not a false positive (e.g., checks logs, confirms account is compromised).
+
+Declare: "Code Red" is declared. Incident Lead assigns a severity level (e.g., Critical) and notifies key stakeholders.
+
+3. Containment (Short-term & Long-term)
+
+Immediate: Isolate the affected server from the network. Reset compromised user passwords. Block malicious IP addresses.
+
+System: Take a forensic image of the database server for evidence. Spin up a clean backup server to restore operations.
+
+4. Eradication
+
+Remove the attacker’s persistence mechanisms (e.g., backdoor scripts).
+
+Patch the vulnerability (e.g., unpatched software or misconfigured access key) that allowed the breach.
+
+Perform a full antivirus/malware scan across the environment.
+
+5. Recovery
+
+Restore the database from the last known good backup.
+
+Monitor the restored system for 24-48 hours to ensure no recurring malicious activity.
+
+Bring the system back into production.
+
+6. Lessons Learned (Post-Mortem)
+
+Within 1 week, hold a meeting to answer:
+
+What happened?
+
+What did we do well?
+
+What went wrong?
+
+Update the response plan and security controls based on findings.
+=========================================================================================================================================================================================================
+
+Q2. Roles and Responsibilities
+Role	Team / Title	Key Responsibilities
+Incident Commander	IT Manager / CISO	Overall leader. Declares the incident, approves containment steps, manages the big picture, and ensures resources are available.
+Security Analyst	Security Operations (SOC)	Investigator. Analyzes logs, identifies the root cause, tracks the attacker’s actions, and recommends containment/eradication steps.
+Forensic Lead	IT Forensics / Security	Evidence Collector. Preserves forensic images, maintains chain of custody for legal purposes, and performs deep-dive analysis.
+IT/Operations	Systems / Network Admin	Implementer. Executes containment (e.g., blocking IPs, isolating systems), patches vulnerabilities, and restores services from backups.
+Communications Lead	PR / Corporate Comms	Spokesperson. Manages internal updates for employees and external statements for customers/media. Only this person speaks officially.
+Legal & HR	Legal Counsel / HR	Risk Managers. Legal advises on breach notification laws and liability. HR manages internal investigations if an employee is involved.
+Executive Sponsor	CIO / CEO	Decision Maker. Approves high-impact decisions (e.g., shutting down major systems, notifying law enforcement) and allocates budget.
+for new people of cyber security field
+Here is a simplified version tailored for newcomers to the cybersecurity field.
