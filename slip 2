@@ -1,0 +1,40 @@
+SECURITY RISK REPORT
+Date: [Insert Date]
+Analyst: [Your Name]
+
+SUMMARY
+During network monitoring, 3 suspicious activities were identified. These include port scanning, ARP spoofing, and unusual DNS queries. Immediate action is recommended to prevent potential attacks.
+
+DETAILED FINDINGS
+1. PORT SCANNING
+Source IP: 192.168.1.150
+
+Target: Multiple internal systems
+
+Time: 10:30 AM – 10:35 AM
+
+Risk Level: 🔴 HIGH
+
+Details: Sent 156 SYN packets to 45 different ports — likely scanning for open services.
+
+2. ARP SPOOFING
+MAC Address: 00:1A:2B:3C:4D:5E
+
+Claimed IPs: Gateway (192.168.1.1) and 3 other hosts
+
+Time: 11:15 AM – Ongoing
+
+Risk Level: 🔴 CRITICAL
+
+Details: Device is impersonating the gateway and other hosts — could be intercepting traffic.
+
+3. SUSPICIOUS DNS QUERY
+Query: update-check.xyz
+
+Source IP: 192.168.1.200
+
+Frequency: Every 60 seconds
+
+Risk Level: 🔴 CRITICAL
+
+Details: Repeated queries to a suspicious domain — possible malware or command-and-control (C2) communication
