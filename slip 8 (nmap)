@@ -1,0 +1,22 @@
+ip route | grep default
+iwconfig
+sudo nmap -sn 192.168.0.1
+sudo nmap -sV 192.168.0.1
+sudo nmap 192.168.0.1
+sudo nmap -o 192.168.0.1
+sudo nmap -o 192.168.0.1
+Sudo nmap –script vuln 192.168.0.1
+sudo nmap -sV -O --script vuln 192.168.0.1
+
+mobile 
+netsh wlan show interface
+
+==================================================================================================
+test encryption setup
+
+curl -I https://google.com
+echo | openssl s_client -connect google.com:443
+nmap --script ssl-enum-ciphers -p 443 google.com
+ssh -vvv localhost 2>&1 | grep cipher
+curl -vI https://google.com 2>&1 | grep "SSL connection"
+nmap --script ssl-enum-ciphers -p 443 google.com
