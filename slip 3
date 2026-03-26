@@ -1,0 +1,5 @@
+sudo adduser raj
+touch file.txt
+ls -l file.txt
+sudo chown raj file.txt
+ls -l file.txt
