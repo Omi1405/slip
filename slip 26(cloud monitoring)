@@ -1,0 +1,54 @@
+Steps (say like practical)
+Login to AWS Console
+Go to IAM (Identity and Access Management)
+Click Users → Add User
+Enter username (e.g., student1)
+Select Programmatic access / Console access
+Click Next → Set Permissions
+Choose:
+Attach policy (like AmazonS3ReadOnlyAccess)
+Click Create UserAssign Role (RBAC)
+Go to Roles → Create Role
+Select service (EC2 / User)
+Attach permission policies
+Assign role to userGo to IAM → Users
+Select user
+Click Security Credentials
+Enable MFA (Multi-Factor Authentication)
+Scan QR using authenticator 
+appData at Rest (Storage Encryption)
+Go to S3 (Storage)
+Create bucket
+Enable:
+“Default Encryption”
+Choose AES-256 or KMS
+Use HTTPS instead of HTTP
+Configure SSL/TLS certificate
+Ensure secure API communication
+Open KMS (Key Management Service)
+Create key
+Assign permissions
+Use key in S3 / database encryption
+
+======================================================================================
+Enable Monitoring
+Go to CloudWatch
+Enable metrics for EC2 / S3
+Go to CloudTrail
+Click Create Trail
+Enable:
+Log all API activity
+Store logs in S3
+Go to CloudWatch → Alarms
+Click Create Alarm
+Select metric:
+CPU usage / login attempts
+Set threshold (e.g., >80%)
+Configure notification (email)
+Check:
+Failed login attempts
+Unusual API calls
+Block suspicious IP
+Disable compromised user
+Modify permissions
+Unknown IP access
