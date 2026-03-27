@@ -1,0 +1,72 @@
+How would you create an ACL to permit all traffic from a specific internal network (e.g., 192.168.1.0/24) to the outside world?
+LINUX ACL PRACTICAL - Commands & Outputs
+# Step 1: Enable IP forwarding
+$ sudo sysctl -w net.ipv4.ip_forward=1
+Output:
+text
+net.ipv4.ip_forward = 1
+# Step 2: Allow traffic from internal network to outside
+$ sudo iptables -A FORWARD -s 192.168.1.0/24 -j ACCEPT
+Output: (no output - just returns to prompt)
+# Step 3: Allow return traffic
+$
+Output: (no output)
+# Step 4: Add NAT
+$ sudo iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o eth0 -j MASQUERADE
+Output: (no output)
+# Step 5: Verify FORWARD rules
+Output:
+text
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+pkts bytes target prot opt in out source destination
+0 0 ACCEPT all -- * * 192.168.1.0/24 0.0.0.0/0
+0 0 ACCEPT all -- * * 0.0.0.0/0 192.168.1.0/24 state RELATED,ESTABLISHED
+# Step 6: Verify NAT rules
+Output:
+text
+Chain POSTROUTING (policy ACCEPT 0 packets, 0 bytes)
+pkts bytes target prot opt in out source destination
+0 0 MASQUERADE all -- * eth0 192.168.1.0/24 0.0.0.0/0
+# Step 7: Check IP forwarding status
+$
+Output:
+text
+1
+# Step 8: Save rules
+$ sudo apt-get install iptables-persistent -y
+Output: (installation messages)
+text
+Reading package lists... Done
+Building dependency tree... Done
+iptables-persistent is already the newest version.
+$ sudo netfilter-persistent save
+Output:
+text
+run-parts: executing /usr/share/netfilter-persistent/plugins.d/15-ip4tables save
+run-parts: executing /usr/share/netfilter-persistent/plugins.d/25-ip6tables save
+# Step 9: Test from client machine (run this on a client in 192.168.1.0/24)
+$
+Output:
+text
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=117 time=12.3 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=117 time=11.8 ms
+64 bytes from 8. 8.8.8: icmp_seq=3 ttl=117 time=12.1 ms
+--- 8.8.8.8 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+# Step 10: Verify packet counters increased
+$ sudo iptables -L FORWARD -v -n
+Output:
+text
+Chain FORWARD (policy ACCEPT 6 packets, 504 bytes)
+pkts bytes target prot opt in out source destination
+3 252 ACCEPT all -- * * 192.168.1.0/24 0.0.0.0/0
+3 252 ACCEPT all -- * * 0.0.0.0/0 192.168.1.0/24 state RELATED,ESTABLISHED
+✅ PRACTICAL COMPLETED SUCCESSFULLY!
+Key indicators:
+ IP forwarding = 1 ✓
+ Rules visible in iptables ✓
+ Ping successful from client ✓
+ Packet counters increasing ✓
+ Rules saved successfully ✓
+i
